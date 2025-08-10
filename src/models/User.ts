@@ -6,6 +6,8 @@ export interface IUser extends Document {
   createdAt: Date;
   lastActiveAt: Date;
   isActive: boolean;
+  lastDailyRewardDate?: Date;
+  totalDailyRewardsEarned: number;
 }
 
 const UserSchema: Schema<IUser> = new Schema({
@@ -32,6 +34,14 @@ const UserSchema: Schema<IUser> = new Schema({
   isActive: {
     type: Boolean,
     default: true,
+  },
+  lastDailyRewardDate: {
+    type: Date,
+  },
+  totalDailyRewardsEarned: {
+    type: Number,
+    default: 0,
+    min: 0,
   },
 });
 

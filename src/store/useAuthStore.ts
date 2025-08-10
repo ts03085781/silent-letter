@@ -7,6 +7,13 @@ export interface User {
   points: number;
   createdAt: string;
   lastActiveAt?: string;
+  totalDailyRewardsEarned?: number;
+  lastDailyRewardDate?: string;
+}
+
+export interface DailyRewardInfo {
+  receivedDailyReward: boolean;
+  pointsAwarded: number;
 }
 
 interface AuthState {
@@ -14,6 +21,8 @@ interface AuthState {
   isAuthenticated: boolean;
   isLoading: boolean;
   error: string | null;
+  dailyRewardInfo: DailyRewardInfo | null;
+  showDailyRewardModal: boolean;
 }
 
 interface AuthActions {
@@ -22,6 +31,9 @@ interface AuthActions {
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
   updatePoints: (newPoints: number) => void;
+  setDailyRewardInfo: (info: DailyRewardInfo | null) => void;
+  setShowDailyRewardModal: (show: boolean) => void;
+  claimDailyReward: () => Promise<void>;
   register: () => Promise<void>;
   fetchUser: () => Promise<void>;
   logout: () => Promise<void>;
@@ -37,6 +49,8 @@ const useAuthStore = create<AuthStore>()(
       isAuthenticated: false,
       isLoading: false,
       error: null,
+      dailyRewardInfo: null,
+      showDailyRewardModal: false,
 
       // Actions
       setUser: (user: User) => {
@@ -72,6 +86,65 @@ const useAuthStore = create<AuthStore>()(
         }
       },
 
+      setDailyRewardInfo: (info: DailyRewardInfo | null) => {
+        set({ dailyRewardInfo: info });
+      },
+
+      setShowDailyRewardModal: (show: boolean) => {
+        set({ showDailyRewardModal: show });
+      },
+
+      claimDailyReward: async () => {
+        const { setLoading, setError, setUser, setDailyRewardInfo, setShowDailyRewardModal } = get();
+        
+        try {
+          setLoading(true);
+          setError(null);
+
+          const response = await fetch('/api/auth/daily-reward', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+
+          const data = await response.json();
+
+          if (!response.ok) {
+            if (data.alreadyClaimed) {
+              setDailyRewardInfo({
+                receivedDailyReward: false,
+                pointsAwarded: 0,
+              });
+              return data;
+            }
+            throw new Error(data.error || 'Failed to claim daily reward');
+          }
+
+          // 更新用戶信息
+          if (data.user) {
+            setUser(data.user);
+          }
+          
+          // 設置獎勵信息並顯示模態框
+          setDailyRewardInfo({
+            receivedDailyReward: true,
+            pointsAwarded: data.pointsAwarded,
+          });
+          
+          setShowDailyRewardModal(true);
+          
+          return data;
+        } catch (error) {
+          const errorMessage = error instanceof Error ? error.message : 'Failed to claim daily reward';
+          setError(errorMessage);
+          console.error('Daily reward error:', error);
+          throw error;
+        } finally {
+          setLoading(false);
+        }
+      },
+
       register: async () => {
         const { setLoading, setError, setUser } = get();
         
@@ -103,7 +176,7 @@ const useAuthStore = create<AuthStore>()(
       },
 
       fetchUser: async () => {
-        const { setLoading, setError, setUser, clearUser } = get();
+        const { setLoading, setError, setUser, clearUser, setDailyRewardInfo, setShowDailyRewardModal } = get();
         
         try {
           setLoading(true);
@@ -128,6 +201,16 @@ const useAuthStore = create<AuthStore>()(
           }
 
           setUser(data.user);
+          
+          // 處理每日獎勵信息
+          if (data.dailyReward) {
+            setDailyRewardInfo(data.dailyReward);
+            
+            // 如果獲得了每日獎勵，顯示模態框
+            if (data.dailyReward.receivedDailyReward) {
+              setShowDailyRewardModal(true);
+            }
+          }
         } catch (error) {
           const errorMessage = error instanceof Error ? error.message : 'Failed to fetch user';
           setError(errorMessage);

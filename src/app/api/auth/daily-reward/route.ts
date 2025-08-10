@@ -3,6 +3,8 @@ import connectMongoDB from '@/lib/mongodb';
 import User from '@/models/User';
 import { withAuth, AuthenticatedRequest } from '@/lib/middleware';
 
+const DAILY_REWARD_POINTS = 10;
+
 // 檢查是否應該獲得每日獎勵
 function shouldReceiveDailyReward(lastRewardDate?: Date): boolean {
   if (!lastRewardDate) return true;
@@ -16,29 +18,8 @@ function shouldReceiveDailyReward(lastRewardDate?: Date): boolean {
   return isNewDay;
 }
 
-// 處理每日登錄獎勵
-async function processDailyReward(user: any) {
-  if (shouldReceiveDailyReward(user.lastDailyRewardDate)) {
-    const DAILY_REWARD_POINTS = 10;
-    
-    user.points += DAILY_REWARD_POINTS;
-    user.lastDailyRewardDate = new Date();
-    user.totalDailyRewardsEarned += 1;
-    
-    return {
-      receivedDailyReward: true,
-      pointsAwarded: DAILY_REWARD_POINTS,
-    };
-  }
-  
-  return {
-    receivedDailyReward: false,
-    pointsAwarded: 0,
-  };
-}
-
-async function meHandler(req: AuthenticatedRequest): Promise<NextResponse> {
-  if (req.method !== 'GET') {
+async function dailyRewardHandler(req: AuthenticatedRequest): Promise<NextResponse> {
+  if (req.method !== 'POST') {
     return NextResponse.json(
       { error: 'Method not allowed' },
       { status: 405 }
@@ -57,32 +38,48 @@ async function meHandler(req: AuthenticatedRequest): Promise<NextResponse> {
       );
     }
 
-    // 處理每日登錄獎勵
-    const dailyRewardResult = await processDailyReward(user);
-    
-    // 更新最後活動時間
+    // 檢查是否已經獲得今日獎勵
+    if (!shouldReceiveDailyReward(user.lastDailyRewardDate)) {
+      return NextResponse.json({
+        success: false,
+        message: '您今天已經獲得過每日登錄獎勵了！',
+        alreadyClaimed: true,
+        nextRewardAvailable: getNextRewardTime(),
+        user: {
+          points: user.points,
+          totalDailyRewardsEarned: user.totalDailyRewardsEarned,
+          lastDailyRewardDate: user.lastDailyRewardDate,
+        },
+      });
+    }
+
+    // 給予每日獎勵
+    user.points += DAILY_REWARD_POINTS;
+    user.lastDailyRewardDate = new Date();
+    user.totalDailyRewardsEarned += 1;
     user.lastActiveAt = new Date();
+    
     await user.save();
 
     return NextResponse.json({
       success: true,
+      message: `恭喜！您獲得了每日登錄獎勵 +${DAILY_REWARD_POINTS} 點數！🎉`,
+      pointsAwarded: DAILY_REWARD_POINTS,
       user: {
         id: user._id as string,
         anonymousId: user.anonymousId,
         points: user.points,
-        createdAt: user.createdAt,
-        lastActiveAt: user.lastActiveAt,
         totalDailyRewardsEarned: user.totalDailyRewardsEarned,
         lastDailyRewardDate: user.lastDailyRewardDate,
       },
-      dailyReward: dailyRewardResult,
+      nextRewardAvailable: getNextRewardTime(),
     });
 
   } catch (error) {
-    console.error('Get user info error:', error);
+    console.error('Daily reward error:', error);
     return NextResponse.json(
       { 
-        error: 'Failed to get user information',
+        error: 'Failed to process daily reward',
         details: process.env.NODE_ENV === 'development' ? error : undefined
       },
       { status: 500 }
@@ -90,4 +87,12 @@ async function meHandler(req: AuthenticatedRequest): Promise<NextResponse> {
   }
 }
 
-export const GET = withAuth(meHandler);
+// 計算下次可以獲得獎勵的時間
+function getNextRewardTime(): string {
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  tomorrow.setHours(0, 0, 0, 0); // 設為明日午夜
+  return tomorrow.toISOString();
+}
+
+export const POST = withAuth(dailyRewardHandler);

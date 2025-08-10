@@ -17,7 +17,7 @@ export default function SendMessageArea() {
     if (!content.trim()) return;
     
     if (!user || user.points < 3) {
-      alert('You need at least 3 points to send a message!');
+      alert('您需要至少 3 點數才能發送訊息！');
       return;
     }
 

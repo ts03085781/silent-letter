@@ -2,6 +2,7 @@
 
 import useAuthStore from '@/store/useAuthStore';
 import useAppStore from '@/store/useAppStore';
+import DailyRewardButton from './DailyRewardButton';
 import { useState } from 'react';
 
 export default function UserProfile() {
@@ -79,12 +80,17 @@ export default function UserProfile() {
               </button>
             </div>
 
+            <div className="p-4 border-b border-gray-100">
+              <DailyRewardButton />
+            </div>
+
             <div className="p-4 bg-gray-50 rounded-b-lg">
               <div className="text-xs text-gray-600">
                 <h4 className="font-medium mb-1">點數系統：</h4>
                 <ul className="space-y-1">
                   <li>• 發送訊息：-3 點</li>
                   <li>• 收到回覆：+1 點</li>
+                  <li>• 每日登錄：+10 點</li>
                   <li>• 起始點數：10 點</li>
                 </ul>
               </div>

@@ -3,6 +3,7 @@
 import SendMessageArea from './SendMessageArea';
 import InboxArea from './InboxArea';
 import UserProfile from './UserProfile';
+import DailyRewardModal from './DailyRewardModal';
 import useAppStore from '@/store/useAppStore';
 
 export default function MainApp() {
@@ -56,6 +57,9 @@ export default function MainApp() {
           </div>
         </div>
       </footer>
+      
+      {/* Daily Reward Modal */}
+      <DailyRewardModal />
     </div>
   );
 }
