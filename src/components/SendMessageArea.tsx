@@ -40,7 +40,7 @@ export default function SendMessageArea() {
   };
 
   const characterCount = content.length;
-  const maxCharacters = 2000;
+  const maxCharacters = 1000;
   const canSend = content.trim().length > 0 && 
                   content.length <= maxCharacters && 
                   user && 

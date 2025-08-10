@@ -24,7 +24,7 @@ async function sendMessageHandler(req: AuthenticatedRequest): Promise<NextRespon
       );
     }
 
-    if (content.length > 2000) {
+    if (content.length > 1000) {
       return NextResponse.json(
         { error: 'Message content exceeds maximum length', code: 'CONTENT_TOO_LONG' },
         { status: 400 }

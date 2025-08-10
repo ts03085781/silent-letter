@@ -28,9 +28,9 @@ export default function UserProfile() {
     <div className="relative">
       <button
         onClick={() => setIsMenuOpen(!isMenuOpen)}
-        className="cursor-pointer flex items-center space-x-3 bg-white rounded-lg shadow-md px-4 py-2 hover:shadow-lg transition-all duration-200"
+        className="cursor-pointer flex items-center bg-white rounded-lg shadow-md px-4 py-2 hover:shadow-lg transition-all duration-200"
       >
-        <div className="w-8 h-8 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center">
+        <div className="w-8 h-8 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center sm:mr-3">
           <span className="text-white text-sm font-semibold">
             {user.anonymousId.slice(0, 2)}
           </span>
