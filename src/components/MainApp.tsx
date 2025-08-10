@@ -48,10 +48,10 @@ export default function MainApp() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="text-center text-gray-600">
             <p className="text-sm">
-              Silent Letter - Connect hearts through anonymous messages
+              Silent Letter - 透過匿名訊息連結心靈
             </p>
             <p className="text-xs mt-2 text-gray-500">
-              Express yourself freely and receive meaningful replies
+              自由表達自己，收穫有意義的回覆
             </p>
           </div>
         </div>

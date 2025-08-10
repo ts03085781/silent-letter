@@ -31,7 +31,7 @@ export default function ReplyForm({ messageId, onReplySubmitted }: ReplyFormProp
       }
       
       setContent('');
-      setSuccess('Reply sent! You earned +1 point! 🎉');
+      setSuccess('回覆已發送！您獲得了 +1 點數！🎉');
       
       // 2秒後關閉表單
       setTimeout(() => {
@@ -53,7 +53,7 @@ export default function ReplyForm({ messageId, onReplySubmitted }: ReplyFormProp
     <div className="bg-blue-50 rounded-lg p-4">
       <h4 className="text-sm font-medium text-blue-800 mb-3 flex items-center">
         <span className="mr-2">✍️</span>
-        Reply Anonymously
+匿名回覆
       </h4>
       
       <form onSubmit={handleSubmit} className="space-y-3">
@@ -61,16 +61,16 @@ export default function ReplyForm({ messageId, onReplySubmitted }: ReplyFormProp
           <textarea
             value={content}
             onChange={(e) => setContent(e.target.value)}
-            placeholder="Write your anonymous reply... Be supportive, thoughtful, and kind."
+            placeholder="寫下您的匿名回覆...保持支持、體貨和善意。"
             className="w-full h-32 px-3 py-2 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none text-gray-700 placeholder-gray-400 text-sm"
             maxLength={maxCharacters}
           />
           <div className="flex justify-between items-center mt-1">
             <div className="text-xs text-gray-500">
-              {characterCount}/{maxCharacters} characters
+              {characterCount}/{maxCharacters} 字元
             </div>
             <div className="text-xs text-green-600">
-              +1 point for replying
+回覆可獲得 +1 點數
             </div>
           </div>
         </div>
@@ -89,12 +89,12 @@ export default function ReplyForm({ messageId, onReplySubmitted }: ReplyFormProp
 
         <div className="flex items-center justify-between">
           <div className="text-xs text-blue-600">
-            Your reply will be anonymous and earn you 1 point
+您的回覆將保持匿名並獲得 1 點數
           </div>
           <button
             type="submit"
             disabled={!canReply}
-            className={`px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 flex items-center space-x-2
+            className={`cursor-pointer px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 flex items-center space-x-2
               ${canReply
                 ? 'bg-blue-600 hover:bg-blue-700 text-white'
                 : 'bg-gray-300 text-gray-500 cursor-not-allowed'
@@ -103,12 +103,12 @@ export default function ReplyForm({ messageId, onReplySubmitted }: ReplyFormProp
             {isLoading ? (
               <>
                 <LoadingSpinner size="sm" />
-                <span>Sending...</span>
+                <span>正在發送...</span>
               </>
             ) : (
               <>
                 <span>💌</span>
-                <span>Send Reply</span>
+                <span>發送回覆</span>
               </>
             )}
           </button>

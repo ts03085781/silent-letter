@@ -20,13 +20,13 @@ export default function MessageItem({ message, isInInbox }: MessageItemProps) {
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
     if (diffDays === 1) {
-      return 'Today';
+      return '今天';
     } else if (diffDays === 2) {
-      return 'Yesterday';
+      return '昨天';
     } else if (diffDays <= 7) {
-      return `${diffDays - 1} days ago`;
+      return `${diffDays - 1} 天前`;
     } else {
-      return date.toLocaleDateString();
+      return date.toLocaleDateString('zh-TW');
     }
   };
 
@@ -57,8 +57,8 @@ export default function MessageItem({ message, isInInbox }: MessageItemProps) {
           <div>
             <p className="text-sm font-medium text-gray-800">
               {isInInbox 
-                ? (message.senderAnonymousId || 'Anonymous Sender')
-                : `Sent to ${message.receiverAnonymousId || 'Anonymous User'}`
+                ? (message.senderAnonymousId || '匿名寄件者')
+                : `寄給 ${message.receiverAnonymousId || '匿名用戶'}`
               }
             </p>
             <p className="text-xs text-gray-500">{formatDate(message.sentAt)}</p>
@@ -80,7 +80,7 @@ export default function MessageItem({ message, isInInbox }: MessageItemProps) {
             onClick={() => setIsExpanded(!isExpanded)}
             className="mt-2 text-blue-600 hover:text-blue-800 text-sm font-medium"
           >
-            {isExpanded ? 'Show less' : 'Read more'}
+            {isExpanded ? '收起' : '閱讀更多'}
           </button>
         )}
       </div>
@@ -90,7 +90,7 @@ export default function MessageItem({ message, isInInbox }: MessageItemProps) {
         <div className="border-t border-gray-100 pt-4 mt-4">
           <h4 className="text-sm font-medium text-gray-600 mb-3 flex items-center">
             <span className="mr-2">💬</span>
-            {message.replies.length} {message.replies.length === 1 ? 'Reply' : 'Replies'}
+            {message.replies.length} 則回覆
           </h4>
           <div className="space-y-3">
             {message.replies.map((reply, index) => (
@@ -109,22 +109,22 @@ export default function MessageItem({ message, isInInbox }: MessageItemProps) {
       <div className="flex items-center justify-between pt-4 border-t border-gray-100 mt-4">
         <div className="text-xs text-gray-500">
           {message.replies.length > 0 
-            ? `${message.replies.length} ${message.replies.length === 1 ? 'reply' : 'replies'}`
-            : 'No replies yet'
+            ? `${message.replies.length} 則回覆`
+            : '還沒有回覆'
           }
         </div>
         {isInInbox && (
           <button
             onClick={() => setShowReplyForm(!showReplyForm)}
-            className="text-blue-600 hover:text-blue-800 text-sm font-medium flex items-center space-x-1"
+            className="cursor-pointer text-blue-600 hover:text-blue-800 text-sm font-medium flex items-center space-x-1"
           >
             <span>💬</span>
-            <span>{showReplyForm ? 'Cancel' : 'Reply'}</span>
+            <span>{showReplyForm ? '取消' : '回覆'}</span>
           </button>
         )}
         {!isInInbox && (
           <div className="text-xs text-gray-500">
-            {message.isRead ? '✅ Read by recipient' : '📍 Delivered'}
+            {message.isRead ? '✅ 對方已讀' : '📍 已送達'}
           </div>
         )}
       </div>

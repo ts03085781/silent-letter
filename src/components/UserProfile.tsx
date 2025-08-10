@@ -27,7 +27,7 @@ export default function UserProfile() {
     <div className="relative">
       <button
         onClick={() => setIsMenuOpen(!isMenuOpen)}
-        className="flex items-center space-x-3 bg-white rounded-lg shadow-md px-4 py-2 hover:shadow-lg transition-all duration-200"
+        className="cursor-pointer flex items-center space-x-3 bg-white rounded-lg shadow-md px-4 py-2 hover:shadow-lg transition-all duration-200"
       >
         <div className="w-8 h-8 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center">
           <span className="text-white text-sm font-semibold">
@@ -48,16 +48,16 @@ export default function UserProfile() {
           />
           <div className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 z-20">
             <div className="p-4 border-b border-gray-100">
-              <h3 className="font-medium text-gray-800">Anonymous Identity</h3>
+              <h3 className="font-medium text-gray-800">匿名身分</h3>
               <p className="text-sm text-gray-600 mt-1">{user.anonymousId}</p>
               <div className="mt-2 flex items-center">
                 <div className="flex-1">
-                  <div className="text-sm text-gray-500">Points</div>
+                  <div className="text-sm text-gray-500">點數</div>
                   <div className="text-lg font-semibold text-blue-600">{user.points}</div>
                 </div>
                 <div className="text-right">
                   <div className="text-xs text-gray-400">
-                    Joined {new Date(user.createdAt).toLocaleDateString()}
+                    加入於 {new Date(user.createdAt).toLocaleDateString('zh-TW')}
                   </div>
                 </div>
               </div>
@@ -81,11 +81,11 @@ export default function UserProfile() {
 
             <div className="p-4 bg-gray-50 rounded-b-lg">
               <div className="text-xs text-gray-600">
-                <h4 className="font-medium mb-1">Points System:</h4>
+                <h4 className="font-medium mb-1">點數系統：</h4>
                 <ul className="space-y-1">
-                  <li>• Send message: -3 points</li>
-                  <li>• Receive reply: +1 point</li>
-                  <li>• Starting points: 10</li>
+                  <li>• 發送訊息：-3 點</li>
+                  <li>• 收到回覆：+1 點</li>
+                  <li>• 起始點數：10 點</li>
                 </ul>
               </div>
             </div>

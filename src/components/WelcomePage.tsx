@@ -16,7 +16,7 @@ export default function WelcomePage({ onGetStarted }: WelcomePageProps) {
       icon: '🎭',
       title: '完全匿名',
       description: '無需註冊，自動生成詩意的匿名身分，保護您的隱私',
-      details: ['自動生成如「SilentWriter123」的美麗身分', '不收集任何個人資訊', '真正的匿名體驗']
+      details: [`自動生成如「${user?.anonymousId}」的美麗身分`, '不收集任何個人資訊', '真正的匿名體驗']
     },
     {
       icon: '🎯',
@@ -28,13 +28,13 @@ export default function WelcomePage({ onGetStarted }: WelcomePageProps) {
       icon: '💎',
       title: '點數機制',
       description: '智慧的點數系統鼓勵有意義的互動',
-      details: ['起始 10 點數', '發送訊息花費 3 點', '收到回覆獲得 1 點']
+      details: ['每日登入獲得10點數', '起始 10 點數', '發送訊息花費 3 點', '收到回覆獲得 1 點','回覆訊息獲得 1 點']
     },
     {
       icon: '🔒',
       title: '30天生命週期',
-      description: '身分會在30天後自動消失，確保真正的匿名性',
-      details: ['30天內保持同一身分', '超過期限自動重置', '保護長期隱私']
+      description: '身分會在停用30天後自動刪除，確保真正的匿名性',
+      details: ['30天內保持同一身分', '超過期限自動移除身份', '保護長期隱私','身份移除後不保留任何資料']
     }
   ];
 
