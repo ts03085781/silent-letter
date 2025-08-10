@@ -32,7 +32,7 @@ export default function DailyRewardButton() {
       // 5秒後清除訊息
       setTimeout(() => setMessage(''), 5000);
     } catch (error) {
-      setMessage('獲取獎勵時發生錯誤，請稍後再試。');
+      setMessage('獲取獎勵時發生錯誤，請稍後再試。' + error);
       setTimeout(() => setMessage(''), 5000);
     }
   };

@@ -16,6 +16,21 @@ export interface DailyRewardInfo {
   pointsAwarded: number;
 }
 
+export interface DailyRewardResponse {
+  success: boolean;
+  message?: string;
+  alreadyClaimed?: boolean;
+  pointsAwarded?: number;
+  user?: {
+    id: string;
+    anonymousId: string;
+    points: number;
+    totalDailyRewardsEarned: number;
+    lastDailyRewardDate: string;
+  };
+  nextRewardAvailable?: string;
+}
+
 interface AuthState {
   user: User | null;
   isAuthenticated: boolean;
@@ -33,7 +48,7 @@ interface AuthActions {
   updatePoints: (newPoints: number) => void;
   setDailyRewardInfo: (info: DailyRewardInfo | null) => void;
   setShowDailyRewardModal: (show: boolean) => void;
-  claimDailyReward: () => Promise<void>;
+  claimDailyReward: () => Promise<DailyRewardResponse>;
   register: () => Promise<void>;
   fetchUser: () => Promise<void>;
   logout: () => Promise<void>;

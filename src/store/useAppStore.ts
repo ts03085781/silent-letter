@@ -18,7 +18,7 @@ export interface AppStore extends AppState, AppActions {}
 
 const useAppStore = create<AppStore>()(
   persist(
-    (set, get) => ({
+    (set) => ({
       // Initial state
       currentPage: 'welcome',
       hasSeenWelcome: false,

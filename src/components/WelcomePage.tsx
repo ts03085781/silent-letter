@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import useAuthStore from '@/store/useAuthStore';
 import UserProfile from './UserProfile';
 
@@ -10,7 +9,6 @@ interface WelcomePageProps {
 
 export default function WelcomePage({ onGetStarted }: WelcomePageProps) {
   const { user } = useAuthStore();
-  const [currentStep, setCurrentStep] = useState(0);
 
   const features = [
     {

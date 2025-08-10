@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import connectMongoDB from '@/lib/mongodb';
-import User from '@/models/User';
+import User, { IUser } from '@/models/User';
 import { withAuth, AuthenticatedRequest } from '@/lib/middleware';
 
 // 檢查是否應該獲得每日獎勵
@@ -17,7 +17,7 @@ function shouldReceiveDailyReward(lastRewardDate?: Date): boolean {
 }
 
 // 處理每日登錄獎勵
-async function processDailyReward(user: any) {
+async function processDailyReward(user: IUser) {
   if (shouldReceiveDailyReward(user.lastDailyRewardDate)) {
     const DAILY_REWARD_POINTS = 10;
     
