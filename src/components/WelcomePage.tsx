@@ -86,8 +86,10 @@ export default function WelcomePage({ onGetStarted }: WelcomePageProps) {
           {/* Mobile Identity Card */}
           <div className="sm:hidden mb-8 bg-white rounded-2xl p-6 shadow-lg border border-gray-100 max-w-sm mx-auto">
             <div className="flex items-center justify-center space-x-3">
-              <div className="w-12 h-12 bg-gradient-to-br from-green-400 to-blue-500 rounded-full flex items-center justify-center">
-                <span className="text-white text-lg">👤</span>
+              <div className="w-8 h-8 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center sm:mr-3">
+                <span className="text-white text-sm font-semibold">
+                  {user?.anonymousId.slice(0, 2)}
+                </span>
               </div>
               <div className="text-left">
                 <p className="text-sm text-gray-500">您的匿名身分</p>
