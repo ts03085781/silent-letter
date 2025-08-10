@@ -90,6 +90,7 @@ export default function UserProfile() {
                 <ul className="space-y-1">
                   <li>• 發送訊息：-3 點</li>
                   <li>• 收到回覆：+1 點</li>
+                  <li>• 回覆訊息：+1 點</li>
                   <li>• 每日登錄：+10 點</li>
                   <li>• 起始點數：10 點</li>
                 </ul>

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import useAuthStore from '@/store/useAuthStore';
+import UserProfile from './UserProfile';
 
 interface WelcomePageProps {
   onGetStarted: () => void;
@@ -55,11 +56,12 @@ export default function WelcomePage({ onGetStarted }: WelcomePageProps) {
                 <p className="text-sm text-gray-500">匿名心靈連結平台</p>
               </div>
             </div>
-            <div className="hidden sm:flex items-center space-x-2 bg-blue-50 px-3 py-2 rounded-lg">
+            {/* <div className="hidden sm:flex items-center space-x-2 bg-blue-50 px-3 py-2 rounded-lg">
               <span className="text-blue-600 text-sm font-medium">您的身分：</span>
               <span className="text-blue-800 font-semibold">{user?.anonymousId}</span>
               <span className="text-blue-600 text-sm">({user?.points} 點數)</span>
-            </div>
+            </div> */}
+            <UserProfile />
           </div>
         </div>
       </header>
