@@ -1,19 +1,26 @@
 'use client';
 
 import useAuthStore from '@/store/useAuthStore';
+import useAppStore from '@/store/useAppStore';
 import { useState } from 'react';
 
 export default function UserProfile() {
   const { user, logout, isLoading } = useAuthStore();
+  const { setCurrentPage } = useAppStore();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   if (!user) return null;
 
   const handleLogout = async () => {
-    if (confirm('Are you sure you want to create a new anonymous identity? This action cannot be undone.')) {
+    if (confirm('您確定要創建新的匿名身分嗎？此操作無法撤銷。')) {
       await logout();
       window.location.reload(); // 刷新頁面以觸發新用戶註冊
     }
+  };
+
+  const handleShowWelcome = () => {
+    setCurrentPage('welcome');
+    setIsMenuOpen(false);
   };
 
   return (
@@ -56,13 +63,19 @@ export default function UserProfile() {
               </div>
             </div>
             
-            <div className="p-2">
+            <div className="p-2 space-y-1">
+              <button
+                onClick={handleShowWelcome}
+                className="w-full text-left px-3 py-2 text-sm text-blue-600 hover:bg-blue-50 rounded-md transition-colors"
+              >
+                📝 查看使用說明
+              </button>
               <button
                 onClick={handleLogout}
                 disabled={isLoading}
                 className="w-full text-left px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-md transition-colors disabled:opacity-50"
               >
-                {isLoading ? 'Creating new identity...' : 'Create new identity'}
+                {isLoading ? '正在創建新身分...' : '🔄 創建新身分'}
               </button>
             </div>
 

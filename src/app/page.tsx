@@ -1,47 +1,55 @@
-import SendMessageArea from '../components/SendMessageArea';
-import InboxArea from '../components/InboxArea';
-import UserProfile from '../components/UserProfile';
+'use client';
+
+import { useEffect } from 'react';
+import useAppStore from '../store/useAppStore';
+import useAuthStore from '../store/useAuthStore';
+import WelcomePage from '../components/WelcomePage';
+import MainApp from '../components/MainApp';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 export default function Home() {
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
-      <header className="bg-white/80 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-                <span className="text-white text-sm font-bold">SL</span>
-              </div>
-              <h1 className="text-xl font-semibold text-gray-800">Silent Letter</h1>
-            </div>
-            <UserProfile />
-          </div>
-        </div>
-      </header>
+  const { currentPage, hasSeenWelcome, markWelcomeSeen } = useAppStore();
+  const { user, isAuthenticated, isLoading } = useAuthStore();
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 lg:gap-8">
-          <div className="animate-fadeInUp">
-            <SendMessageArea />
-          </div>
-          <div className="animate-fadeInUp" style={{ animationDelay: '0.1s' }}>
-            <InboxArea />
-          </div>
-        </div>
-      </main>
+  // 當用戶首次登入時，顯示歡迎頁面
+  useEffect(() => {
+    if (isAuthenticated && user && !hasSeenWelcome) {
+      // 確保顯示歡迎頁面
+      useAppStore.getState().setCurrentPage('welcome');
+    }
+  }, [isAuthenticated, user, hasSeenWelcome]);
 
-      <footer className="mt-20 bg-gray-50 border-t border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="text-center text-gray-600">
-            <p className="text-sm">
-              Silent Letter - Connect hearts through anonymous messages
-            </p>
-            <p className="text-xs mt-2 text-gray-500">
-              Express yourself freely and receive meaningful replies
-            </p>
-          </div>
+  const handleGetStarted = () => {
+    markWelcomeSeen();
+  };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center">
+        <div className="text-center">
+          <LoadingSpinner size="lg" />
+          <p className="text-gray-600 mt-4">正在初始化您的匿名身分...</p>
         </div>
-      </footer>
-    </div>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated || !user) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
+            <span className="text-white text-2xl">✉️</span>
+          </div>
+          <p className="text-gray-600">正在準備您的匿名體驗...</p>
+        </div>
+      </div>
+    );
+  }
+
+  return currentPage === 'welcome' ? (
+    <WelcomePage onGetStarted={handleGetStarted} />
+  ) : (
+    <MainApp />
   );
 }
